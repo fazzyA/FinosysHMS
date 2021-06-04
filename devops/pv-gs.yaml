@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-gs
+spec:
+ accessModes:
+ - ReadWriteMany
+ capacity:
+   storage: 1Gi
+ hostPath:
+   path: /tmp/pv-gs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-gs
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ""
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-gs
+  labels:
+    app: db-gs
+spec:
+  volumes:
+  - name: pv-gs
+    persistentVolumeClaim:
+      claimName: pvc-gs
+  containers:
+  - image: mongo
+    name: container-gs
+    command:
+    - mongod
+    - "--bind_ip"
+    - "0.0.0.0"
+    ports:
+    - containerPort: 27017
+    volumeMounts:
+    - name: pv-gs
+      mountPath: /data/db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: db-gs
+  name: db-gs
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+      protocol: TCP
+  selector:
+    app: db-gs
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finosys-gs-config
+data:
+  PORT: "5006"
+  CLIENT: 20.197.104.123
+  MONGO_URI: mongodb://db-gs:27017/db-pro
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finosys-gs-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finosys-gs
+  template:
+    metadata:
+      labels:
+        app: finosys-gs
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-gs:latest
+        name: container-gs
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 5006
+        envFrom:
+        - configMapRef:
+            name: finosys-gs-config
+        - secretRef:
+            name: jwtsec
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finosys-gs-service
+spec:
+  ports:
+  - port: 5006
+    targetPort: 5006
+  selector:
+    app: finosys-gs
+  type: LoadBalancer

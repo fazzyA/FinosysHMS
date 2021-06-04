@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fe-store-config
+data:
+  REACT_APP_DBB: http://20.43.175.176:5001/,
+  REACT_APP_DB_USER: http://20.198.154.19:5000/
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: fe-store
+  name: fe-store-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe-store
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: fe-store
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-fe-store:latest
+        imagePullPolicy: Always
+        name: fe-store
+        envFrom:
+        - configMapRef:
+            name: fe-store-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-store
+spec:
+  selector:
+    app: fe-store
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+

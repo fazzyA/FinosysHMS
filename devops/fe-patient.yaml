@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fe-patient-config
+data:
+  REACT_APP_DBB: http://20.198.192.233:5004/,
+  REACT_APP_DB_USER: http://20.198.154.19:5000/
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: fe-patient
+  name: fe-patient-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe-patient
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: fe-patient
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-fe-patient:latest
+        imagePullPolicy: Always
+        name: fe-patient
+        envFrom:
+        - configMapRef:
+            name: fe-patient-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-patient
+spec:
+  selector:
+    app: fe-patient
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+

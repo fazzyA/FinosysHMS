@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-dept2-tr
+spec:
+ accessModes:
+ - ReadWriteMany
+ capacity:
+   storage: 1Gi
+ hostPath:
+   path: /tmp/pv-dept2-tr
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-dept2-tr
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ""
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-dept2-tr
+  labels:
+    app: db-dept2-tr
+spec:
+  volumes:
+  - name: pv-dept2-tr
+    persistentVolumeClaim:
+      claimName: pvc-dept2-tr
+  containers:
+  - image: mongo
+    name: container-dept2-tr
+    command:
+    - mongod
+    - "--bind_ip"
+    - "0.0.0.0"
+    ports:
+    - containerPort: 27017
+    volumeMounts:
+    - name: pv-dept2-tr
+      mountPath: /data/db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: db-dept2-tr
+  name: db-dept2-tr
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+      protocol: TCP
+  selector:
+    app: db-dept2-tr
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finosys-dept2-tr-config
+data:
+  PORT: "5005"
+  CLIENT: 20.197.104.123
+  MONGO_URI: mongodb://db-dept2-tr:27017/db-pro
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finosys-dept2-tr-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finosys-dept2-tr
+  template:
+    metadata:
+      labels:
+        app: finosys-dept2-tr
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-dept2-transaction:latest
+        name: container-dept2-tr
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 5005
+        envFrom:
+        - configMapRef:
+            name: finosys-dept2-tr-config
+        - secretRef:
+            name: jwtsec
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finosys-dept2-tr-service
+spec:
+  ports:
+  - port: 5005
+    targetPort: 5005
+  selector:
+    app: finosys-dept2-tr
+  type: LoadBalancer

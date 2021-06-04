@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fe-gs-config
+data:
+  REACT_APP_DBB: http://20.198.210.249:5006/,
+  REACT_APP_DB_USER: http://20.198.154.19:5000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: fe-gs
+  name: fe-gs-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe-gs
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: fe-gs
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-fe-gs:latest
+        imagePullPolicy: Always
+        name: fe-gs
+        envFrom:
+        - configMapRef:
+            name: fe-gs-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-gs
+spec:
+  selector:
+    app: fe-gs
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+

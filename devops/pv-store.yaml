@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-store
+spec:
+ accessModes:
+ - ReadWriteMany
+ capacity:
+   storage: 1Gi
+ hostPath:
+   path: /tmp/pv-store
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-store
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ""
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-store
+  labels:
+    app: db-store
+spec:
+  volumes:
+  - name: pv-store
+    persistentVolumeClaim:
+      claimName: pvc-store
+  containers:
+  - image: mongo
+    name: container-store
+    command:
+    - mongod
+    - "--bind_ip"
+    - "0.0.0.0"
+    ports:
+    - containerPort: 27017
+    volumeMounts:
+    - name: pv-store
+      mountPath: /data/db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: db-store
+  name: db-store
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+      protocol: TCP
+  selector:
+    app: db-store
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finosys-store-config
+data:
+  PORT: "5001"
+  CLIENT: 20.197.104.123
+  MONGO_URI: mongodb://db-store:27017/db-store
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finosys-store-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finosys-store
+  template:
+    metadata:
+      labels:
+        app: finosys-store
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-store:latest
+        name: container-store
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 5001
+        envFrom:
+        - configMapRef:
+            name: finosys-store-config
+        - secretRef:
+            name: jwtsec
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finosys-store-service
+spec:
+  ports:
+  - port: 5001
+    targetPort: 5001
+  selector:
+    app: finosys-store
+  type: LoadBalancer

@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-patient
+spec:
+ accessModes:
+ - ReadWriteMany
+ capacity:
+   storage: 1Gi
+ hostPath:
+   path: /tmp/pv-patient
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-patient
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ""
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-patient
+  labels:
+    app: db-patient
+spec:
+  volumes:
+  - name: pv-patient
+    persistentVolumeClaim:
+      claimName: pvc-patient
+  containers:
+  - image: mongo
+    name: container-patient
+    command:
+    - mongod
+    - "--bind_ip"
+    - "0.0.0.0"
+    ports:
+    - containerPort: 27017
+    volumeMounts:
+    - name: pv-patient
+      mountPath: /data/db
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: db-patient
+  name: db-patient
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+      protocol: TCP
+  selector:
+    app: db-patient
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finosys-patient-config
+data:
+  PORT: "5004"
+  CLIENT: 20.197.104.123
+  MONGO_URI: mongodb://db-patient:27017/db-patient
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finosys-patient-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finosys-patient
+  template:
+    metadata:
+      labels:
+        app: finosys-patient
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-patients:latest
+        name: container-patient
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 5004
+        envFrom:
+        - configMapRef:
+            name: finosys-patient-config
+        - secretRef:
+            name: jwtsec
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finosys-patient-service
+spec:
+  ports:
+  - port: 5004
+    targetPort: 5004
+  selector:
+    app: finosys-patient
+  type: LoadBalancer
