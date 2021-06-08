@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: user
+  namespace: default 
+spec:
+  ingressClassName: kong
+  rules:
+  - http:
+      paths:
+      - path: /dept1
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-dept1-service
+            port:
+              number: 5002
+      - path: /dept2
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-dept2-service
+            port:
+              number: 5003
+      - path: /dept2-tr
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-dept2-tr-service
+            port:
+              number: 5005
+      - path: /gs
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-gs-service
+            port:
+              number: 5006
+      - path: /patient
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-patient-service
+            port:
+              number: 5004
+      - path: /store
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-store-service
+            port:
+              number: 5001
+      - path: /user
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-user-service
+            port:
+              number: 5000
+

@@ -25,16 +25,16 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json())
 
 // app.use('/api/products', productRoutes)
-app.use('/api/users', userRoutes)
+app.use('/user/api/users', userRoutes)
 // app.use('/api/orders', orderRoutes)
 // app.use('/api/upload', uploadRoutes)
 
-app.get('/api/config/paypal', (req, res) =>
+app.get('/user/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
 
 const __dirname = path.resolve()
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+app.use('/user/uploads', express.static(path.join(__dirname, '/uploads')))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')))
@@ -43,11 +43,11 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   )
 } else {
-  app.get('/', (req, res) => {
+  app.get('/user/', (req, res) => {
     res.send('API User is running....')
   })
 }
-app.get('/test', (req, res) => {
+app.get('/user/test', (req, res) => {
   res.send('API User is running....')
 })
 

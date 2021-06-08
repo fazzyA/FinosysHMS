@@ -85,7 +85,7 @@ spec:
         app: finosys-store
     spec:
       containers:
-      - image: fazzyaziz/finosys-store:latest
+      - image: fazzyaziz/finosys-store:v2
         name: container-store
         imagePullPolicy: "Always"
         ports:

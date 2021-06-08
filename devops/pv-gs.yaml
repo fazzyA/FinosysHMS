@@ -85,7 +85,7 @@ spec:
         app: finosys-gs
     spec:
       containers:
-      - image: fazzyaziz/finosys-gs:latest
+      - image: fazzyaziz/finosys-gs:v2
         name: container-gs
         imagePullPolicy: "Always"
         ports:

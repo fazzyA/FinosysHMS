@@ -3,8 +3,8 @@ kind: ConfigMap
 metadata:
   name: fe-patient-config
 data:
-  REACT_APP_DBB: http://20.198.192.233:5004/,
-  REACT_APP_DB_USER: http://20.198.154.19:5000/
+  REACT_APP_DBB: http://52.139.249.44/patient/,
+  REACT_APP_DB_USER: http://52.139.249.44/user/
 
 ---
 apiVersion: apps/v1
@@ -27,7 +27,7 @@ spec:
         app: fe-patient
     spec:
       containers:
-      - image: fazzyaziz/finosys-fe-patient:latest
+      - image: fazzyaziz/finosys-fe-patient:v2
         imagePullPolicy: Always
         name: fe-patient
         envFrom:

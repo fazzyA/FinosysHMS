@@ -27,7 +27,7 @@ spec:
         app: fe-gs
     spec:
       containers:
-      - image: fazzyaziz/finosys-fe-gs:latest
+      - image: fazzyaziz/finosys-fe-gs:v2
         imagePullPolicy: Always
         name: fe-gs
         envFrom:

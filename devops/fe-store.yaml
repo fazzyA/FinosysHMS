@@ -27,7 +27,7 @@ spec:
         app: fe-store
     spec:
       containers:
-      - image: fazzyaziz/finosys-fe-store:latest
+      - image: fazzyaziz/finosys-fe-store:v2
         imagePullPolicy: Always
         name: fe-store
         envFrom:

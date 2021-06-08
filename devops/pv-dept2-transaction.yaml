@@ -85,7 +85,7 @@ spec:
         app: finosys-dept2-tr
     spec:
       containers:
-      - image: fazzyaziz/finosys-dept2-transaction:latest
+      - image: fazzyaziz/finosys-dept2-transaction:v2
         name: container-dept2-tr
         imagePullPolicy: "Always"
         ports:

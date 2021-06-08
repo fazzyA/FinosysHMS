@@ -23,16 +23,16 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json())
 
-app.use('/api/products', productRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/upload', uploadRoutes)
+app.use('/gs/api/products', productRoutes)
+app.use('/gs/api/orders', orderRoutes)
+app.use('/gs/api/upload', uploadRoutes)
 
-app.get('/api/config/paypal', (req, res) =>
+app.get('/gs/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
 
 const __dirname = path.resolve()
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+app.use('/gs/uploads', express.static(path.join(__dirname, '/uploads')))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')))
@@ -41,11 +41,11 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   )
 } else {
-  app.get('/', (req, res) => {
+  app.get('/gs/', (req, res) => {
     res.send('Giftstore is running....')
   })
 }
-app.get('/test', (req, res) => {
+app.get('/gs/test', (req, res) => {
   res.send('Giftstore vproducts are running....')
 })
 

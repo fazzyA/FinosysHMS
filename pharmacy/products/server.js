@@ -23,16 +23,16 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json())
 
-app.use('/api/products', productRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/upload', uploadRoutes)
+app.use('/dept1/api/products', productRoutes)
+app.use('/dept1/api/orders', orderRoutes)
+app.use('/dept1/api/upload', uploadRoutes)
 
-app.get('/api/config/paypal', (req, res) =>
+app.get('/dept1/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
 
 const __dirname = path.resolve()
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+app.use('/dept1/uploads', express.static(path.join(__dirname, '/uploads')))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')))
@@ -41,11 +41,11 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   )
 } else {
-  app.get('/', (req, res) => {
+  app.get('/dept1/', (req, res) => {
     res.send('API is running....')
   })
 }
-app.get('/test', (req, res) => {
+app.get('/dept1/test', (req, res) => {
   res.send('Medstore products are running....')
 })
 

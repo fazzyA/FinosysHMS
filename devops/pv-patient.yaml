@@ -84,7 +84,7 @@ spec:
         app: finosys-patient
     spec:
       containers:
-      - image: fazzyaziz/finosys-patients:latest
+      - image: fazzyaziz/finosys-patients:v2
         name: container-patient
         imagePullPolicy: "Always"
         ports:

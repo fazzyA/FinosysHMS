@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo
+  annotations:
+    kubernetes.io/ingress.class: kong
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /foo
+        backend:
+          serviceName: echo
+          servicePort: 80
+      - path: /user
+        backend:
+          serviceName: finosys-user-service.default.svc.cluster.local
+          servicePort: 5000          
+      - path: /store
+        backend:
+          serviceName: finosys-store-service.default.svc.cluster.local
+          servicePort: 5001
+      - path: /patient
+        backend:
+          serviceName: finosys-patient-service.default.svc.cluster.local
+          servicePort: 5004
+      - path: /dept1
+        backend:
+          serviceName: finosys-dept1-service.default.svc.cluster.local
+          servicePort: 5002
+      - path: /dept2
+        backend:
+          serviceName: finosys-dept2-service.default.svc.cluster.local
+          servicePort: 5003
+      - path: /dept3
+        backend:
+          serviceName: finosys-gs-service.default.svc.cluster.local
+          servicePort: 5006                   
+      - path: /dept2tr
+        backend:
+          serviceName: finosys-dept2-tr-service.default.svc.cluster.local
+          servicePort: 5005                   
