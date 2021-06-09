@@ -24,7 +24,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     const order = new Order({
       orderItems,
       user: req.user._id,
-      userName: req.user.name,
+      userName: userName,
       shippingAddress,
       paymentMethod,
       itemsPrice,
