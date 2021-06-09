@@ -23,16 +23,16 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json())
 
-app.use('/dept1/api/products', productRoutes)
-app.use('/dept1/api/orders', orderRoutes)
-app.use('/dept1/api/upload', uploadRoutes)
+app.use('/dept2/api/products', productRoutes)
+app.use('/dept2/api/orders', orderRoutes)
+app.use('/dept2/api/upload', uploadRoutes)
 
-app.get('/dept1/api/config/paypal', (req, res) =>
+app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
 
 const __dirname = path.resolve()
-app.use('/dept1/uploads', express.static(path.join(__dirname, '/uploads')))
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')))
@@ -41,22 +41,22 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
   )
 } else {
-  app.get('/dept1/', (req, res) => {
-    res.send('Pharmacy service is running....')
+  app.get('/dept2/', (req, res) => {
+    res.send('API radiology(dept 2) is running....')
   })
 }
-app.get('/dept1/test', (req, res) => {
-  res.send('Pharmacy service is running....')
+app.get('/dept2/test', (req, res) => {
+  res.send('API radiology(dept 2) is running on route test.')
 })
 
 app.use(notFound)
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 5002
+const PORT = process.env.PORT || 5003
 
 app.listen(
   PORT,
   console.log(
-    `Medical store products running in ${process.env.NODE_ENV} mode on port ${PORT} have secret=${process.env.JWT_SECRET}`.yellow.bold
+    `Dept radiology 2 running in ${process.env.NODE_ENV} mode on port ${PORT} have secret=${process.env.JWT_SECRET}`.yellow.bold
   )
 )

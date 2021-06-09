@@ -27,10 +27,10 @@ app.use('/api/transaction', patientTransactionRoutes)
 const __dirname = path.resolve()
 
 app.get('/', (req, res) => {
-  res.send('API radiology transaction is running....')
+  res.send('API radiology service is running....')
 })
 app.get('/test', (req, res) => {
-  res.send('Dept 2 radiology transaction is running....')
+  res.send('API radiology service is running....')
 })
 
 app.use(notFound)
@@ -41,6 +41,6 @@ const PORT = process.env.PORT || 5005
 app.listen(
   PORT,
   console.log(
-    `Dept radiology transaction 2 running in ${process.env.NODE_ENV} mode on port ${PORT} have secret=${process.env.JWT_SECRET}`.yellow.bold
+    `Dept radiology service running in ${process.env.NODE_ENV} mode on port ${PORT} have secret=${process.env.JWT_SECRET}`.yellow.bold
   )
 )

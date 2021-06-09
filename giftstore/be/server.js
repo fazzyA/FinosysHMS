@@ -42,11 +42,14 @@ if (process.env.NODE_ENV === 'production') {
   )
 } else {
   app.get('/gs/', (req, res) => {
-    res.send('Giftstore is running....')
+    res.send('Giftstore service is running.')
+  });
+  app.get('/gs/giftstore', (req, res) => {
+    res.send('Giftstore service is running.')
   })
 }
 app.get('/gs/test', (req, res) => {
-  res.send('Giftstore vproducts are running....')
+  res.send('Giftstore service is running on route test.')
 })
 
 app.use(notFound)
