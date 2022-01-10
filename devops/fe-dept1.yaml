@@ -3,8 +3,8 @@ kind: ConfigMap
 metadata:
   name: fe-dept1-config
 data:
-  REACT_APP_DBB: http://20.43.147.124:5002/,
-  REACT_APP_DB_USER: http://20.198.154.19:5000
+  REACT_APP_DBB: 10.104.112.199:5002/,
+  REACT_APP_DB_USER: 10.101.235.189:5000
 
 ---
 apiVersion: apps/v1
