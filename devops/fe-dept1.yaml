@@ -27,7 +27,7 @@ spec:
         app: fe-dept1
     spec:
       containers:
-      - image: fazzyaziz/finosys-fe-dept1:vf1
+      - image: fazzyaziz/finosys-fe-dept1:vf2
         imagePullPolicy: Always
         name: fe-dept1
         envFrom:
