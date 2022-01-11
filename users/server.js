@@ -44,7 +44,8 @@ if (process.env.NODE_ENV === 'production') {
   )
 } else {
   app.get('/user/', (req, res) => {
-    res.send('API User is running....')
+    res.send(`API User is running....
+    db=${process.env.MONGO_URI}`)
   })
 }
 app.get('/user/test', (req, res) => {

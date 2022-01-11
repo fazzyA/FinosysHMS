@@ -15,7 +15,14 @@ dotenv.config()
 connectDB()
 
 const app = express()
-app.use(cors())
+const corsOpts = {
+  origin: '*',
+  credentials: true,
+  methods: ['GET','POST','HEAD','PUT','PATCH','DELETE'],
+  allowedHeaders: ['Content-Type'],
+  exposedHeaders: ['Content-Type']
+};
+app.use(cors(corsOpts))
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
@@ -42,11 +49,15 @@ if (process.env.NODE_ENV === 'production') {
   )
 } else {
   app.get('/dept1/', (req, res) => {
-    res.send('API is running....')
-  })
+    res.send(`Medical store products running in ${process.env.NODE_ENV} 
+    mode on port ${PORT} have secret=${process.env.JWT_SECRET}
+    and db=${process.env.MONGO_URI}`)
+    })
 }
 app.get('/dept1/test', (req, res) => {
-  res.send('Medstore products are running....')
+  res.send(`Medical store products running in ${process.env.NODE_ENV} 
+  mode on port ${PORT} have secret=${process.env.JWT_SECRET}
+  and db=${process.env.MONGO_URI}`)
 })
 
 app.use(notFound)
