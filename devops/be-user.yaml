@@ -84,7 +84,7 @@ spec:
         app: finosys-user
     spec:
       containers:
-      - image: fazzyaziz/finosys-users:v2
+      - image: fazzyaziz/finosys-users:vfinal
         name: container-user
         imagePullPolicy: "Always"
         ports:

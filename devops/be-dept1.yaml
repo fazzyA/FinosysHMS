@@ -85,7 +85,7 @@ spec:
         app: finosys-dept1
     spec:
       containers:
-      - image: fazzyaziz/finosys-dept1:v4
+      - image: fazzyaziz/finosys-dept1:vfinal
         name: container-dept1
         imagePullPolicy: "Always"
         ports:
