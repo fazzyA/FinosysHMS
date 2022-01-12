@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: fe-dept1
+  name: fe-dept1-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fe-dept1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: fe-dept1
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-fe-dept1:vf2
+        imagePullPolicy: Always
+        name: fe-dept1
+        envFrom:
+        - configMapRef:
+            name: fe-dept1-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-dept1
+spec:
+  selector:
+    app: fe-dept1
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer

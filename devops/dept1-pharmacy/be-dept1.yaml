@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finosys-dept1-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finosys-dept1
+  template:
+    metadata:
+      labels:
+        app: finosys-dept1
+    spec:
+      containers:
+      - image: fazzyaziz/finosys-dept1:vf1
+        name: container-dept1
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 5002
+        envFrom:
+        - configMapRef:
+            name: finosys-dept1-config
+        - secretRef:
+            name: jwtsec
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: finosys-dept1-service
+spec:
+  ports:
+  - port: 5002
+    targetPort: 5002
+  selector:
+    app: finosys-dept1
+  type: LoadBalancer
