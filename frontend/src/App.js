@@ -4,7 +4,7 @@ function App() {
   const [state, setstate] = React.useState({ message: "initial msg" });
 
   const handleReq = () => {
-    fetch(`http://localhost:5006/test`)
+    fetch(`${process.env.REACT_APP_BE}/test`)
       .then(res => res.json())
       .then(res => {
         console.log(res)

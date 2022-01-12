@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: finosys-fe-config
 data:
-  REACT_APP_BE: http://10.111.135.140:5002/,
+  REACT_APP_BE: http://10.111.50.49:5006,
 
 ---
 apiVersion: apps/v1
