@@ -57,4 +57,11 @@ spec:
             name: finosys-user-service
             port:
               number: 5000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: finosys-be-svc
+            port:
+              number: 5006
 
